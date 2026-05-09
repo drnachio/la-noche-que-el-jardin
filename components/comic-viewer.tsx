@@ -30,7 +30,7 @@ export function ComicViewer({ pageIndex, onChange }: Props) {
   }, [pageIndex, onChange]);
 
   return (
-    <div className="relative h-full shrink-0 aspect-[210/297] bg-black">
+    <div className="relative hidden h-full shrink-0 aspect-[210/297] bg-black md:block">
       <Image
         key={slug}
         src={`/comic/${slug}.png`}
