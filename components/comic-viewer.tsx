@@ -47,9 +47,9 @@ export function ComicViewer({ pageIndex, onChange }: Props) {
         aria-label="Página anterior"
         disabled={atStart}
         onClick={() => onChange(pageIndex - 1)}
-        className="absolute left-2 top-1/2 z-10 size-12 -translate-y-1/2 rounded-full opacity-70 hover:opacity-100"
+        className="absolute left-3 top-1/2 z-10 size-14 -translate-y-1/2 rounded-full opacity-70 hover:opacity-100"
       >
-        <ChevronLeft className="size-6" />
+        <ChevronLeft className="size-7" />
       </Button>
 
       <Button
@@ -58,12 +58,12 @@ export function ComicViewer({ pageIndex, onChange }: Props) {
         aria-label="Página siguiente"
         disabled={atEnd}
         onClick={() => onChange(pageIndex + 1)}
-        className="absolute right-2 top-1/2 z-10 size-12 -translate-y-1/2 rounded-full opacity-70 hover:opacity-100"
+        className="absolute right-3 top-1/2 z-10 size-14 -translate-y-1/2 rounded-full opacity-70 hover:opacity-100"
       >
-        <ChevronRight className="size-6" />
+        <ChevronRight className="size-7" />
       </Button>
 
-      <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 rounded-md bg-black/60 px-3 py-1 text-xs text-white/80 backdrop-blur">
+      <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-md bg-black/60 px-4 py-1.5 text-sm text-white/85 backdrop-blur">
         {pageLabel(slug)} · {pageIndex + 1} / {PAGES.length}
       </div>
     </div>

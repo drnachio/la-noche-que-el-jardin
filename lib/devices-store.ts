@@ -15,11 +15,13 @@ type State = {
   permissionGranted: boolean;
   ambientDevice: Record<Ambient, string | null>;
   ambientOverride: Record<string, Ambient>;
+  soundVolume: Record<string, number>;
 };
 
 type Actions = {
   setAmbientDevice: (a: Ambient, deviceId: string | null) => void;
   setSoundAmbient: (soundId: string, ambient: Ambient) => void;
+  setSoundVolume: (soundId: string, volume: number) => void;
   requestPermissionAndRefresh: () => Promise<void>;
   refresh: () => Promise<void>;
 };
@@ -31,6 +33,7 @@ export const useDevices = create<State & Actions>()(
       permissionGranted: false,
       ambientDevice: { casa: null, nucleo: null, ia: null },
       ambientOverride: {},
+      soundVolume: {},
 
       setAmbientDevice(a, deviceId) {
         set({ ambientDevice: { ...get().ambientDevice, [a]: deviceId } });
@@ -39,6 +42,12 @@ export const useDevices = create<State & Actions>()(
       setSoundAmbient(soundId, ambient) {
         set({
           ambientOverride: { ...get().ambientOverride, [soundId]: ambient },
+        });
+      },
+
+      setSoundVolume(soundId, volume) {
+        set({
+          soundVolume: { ...get().soundVolume, [soundId]: volume },
         });
       },
 
@@ -73,6 +82,7 @@ export const useDevices = create<State & Actions>()(
       partialize: (s) => ({
         ambientDevice: s.ambientDevice,
         ambientOverride: s.ambientOverride,
+        soundVolume: s.soundVolume,
       }),
     },
   ),
