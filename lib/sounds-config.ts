@@ -432,6 +432,63 @@ export const SOUNDS: SoundDef[] = [
     defaultAmbient: "casa",
     kind: "music",
   },
+  {
+    id: "p45-p1",
+    label: "P1",
+    file: "/sounds/p1-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p45-p2",
+    label: "P2",
+    file: "/sounds/p2-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p45-p3",
+    label: "P3",
+    file: "/sounds/p3-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p45-p4",
+    label: "P4",
+    file: "/sounds/p4-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p45-p5",
+    label: "P5",
+    file: "/sounds/p5-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p45-p6",
+    label: "P6",
+    file: "/sounds/p6-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p45-p7",
+    label: "P7",
+    file: "/sounds/p7-track.mp3",
+    page: "p45",
+    defaultAmbient: "casa",
+  },
+  {
+    id: "p51-song",
+    label: "Song",
+    file: "/sounds/song.mp3",
+    page: "p51",
+    defaultAmbient: "nucleo",
+    kind: "music",
+  },
 ];
 
 export function pageKeyFromSlug(slug: string): PageKey {
