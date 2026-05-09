@@ -187,6 +187,27 @@ export const SOUNDS: SoundDef[] = [
     kind: "music",
   },
   {
+    id: "p19-carmen",
+    label: "Carmen",
+    file: "/sounds/p19-carmen.mp3",
+    page: "p19",
+    defaultAmbient: "ia",
+  },
+  {
+    id: "p19-julieta",
+    label: "Julieta",
+    file: "/sounds/p19-julieta.mp3",
+    page: "p19",
+    defaultAmbient: "ia",
+  },
+  {
+    id: "p19-candela",
+    label: "Candela",
+    file: "/sounds/p19-candela.mp3",
+    page: "p19",
+    defaultAmbient: "ia",
+  },
+  {
     id: "p20-detector",
     label: "Detector",
     file: "/sounds/detector.mp3",
