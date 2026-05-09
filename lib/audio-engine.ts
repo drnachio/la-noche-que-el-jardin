@@ -28,8 +28,6 @@ type EnsemblePlayback = {
   liveSources: Set<AudioBufferSourceNode>;
   startedAt: number; // performance.now() ms
   scheduleTimer?: ReturnType<typeof setTimeout>;
-  fullIntensityTimer?: ReturnType<typeof setTimeout>;
-  fullIntensity: boolean;
   stopped: boolean;
 };
 
@@ -178,7 +176,6 @@ function hardStop(pb: Playback) {
   } else {
     pb.stopped = true;
     if (pb.scheduleTimer !== undefined) clearTimeout(pb.scheduleTimer);
-    if (pb.fullIntensityTimer !== undefined) clearTimeout(pb.fullIntensityTimer);
     teardownEnsemble(pb);
   }
   active.delete(pb.sound.id);
@@ -280,21 +277,8 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * Math.max(0, Math.min(1, t));
 }
 
-function ensembleStartLoop(pb: EnsemblePlayback, voiceIndex: number) {
-  if (pb.stopped) return;
-  if (pb.activeVoices.has(voiceIndex)) return;
-  const buffer = pb.voiceBuffers[voiceIndex];
-  const source = pb.ctx.createBufferSource();
-  source.buffer = buffer;
-  source.loop = true;
-  source.connect(pb.gain);
-  pb.activeVoices.add(voiceIndex);
-  pb.liveSources.add(source);
-  source.start();
-}
-
 function ensembleTriggerOnce(pb: EnsemblePlayback) {
-  if (pb.stopped || pb.fullIntensity) return;
+  if (pb.stopped) return;
   const available: number[] = [];
   for (let i = 0; i < pb.voiceBuffers.length; i++) {
     if (!pb.activeVoices.has(i)) available.push(i);
@@ -313,15 +297,12 @@ function ensembleTriggerOnce(pb: EnsemblePlayback) {
     try {
       source.disconnect();
     } catch {}
-    if (pb.fullIntensity && !pb.stopped) {
-      ensembleStartLoop(pb, idx);
-    }
   };
   source.start();
 }
 
 function ensembleScheduleNext(pb: EnsemblePlayback) {
-  if (pb.stopped || pb.fullIntensity) return;
+  if (pb.stopped) return;
   const elapsedS = (performance.now() - pb.startedAt) / 1000;
   const t = elapsedS / pb.sound.buildupSeconds!;
   const initial = pb.sound.initialMinGapMs!;
@@ -365,20 +346,9 @@ async function playEnsemble(
     activeVoices: new Set(),
     liveSources: new Set(),
     startedAt: performance.now(),
-    fullIntensity: false,
     stopped: false,
   };
   active.set(sound.id, pb);
-
-  pb.fullIntensityTimer = setTimeout(() => {
-    if (pb.stopped) return;
-    pb.fullIntensity = true;
-    if (pb.scheduleTimer !== undefined) clearTimeout(pb.scheduleTimer);
-    for (let i = 0; i < pb.voiceBuffers.length; i++) {
-      if (!pb.activeVoices.has(i)) ensembleStartLoop(pb, i);
-    }
-    emit();
-  }, buildup * 1000);
 
   ensembleScheduleNext(pb);
   emit();
