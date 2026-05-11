@@ -8,13 +8,24 @@ import { PAGES, pageLabel } from "@/lib/comic-pages";
 
 type Props = {
   pageIndex: number;
-  onChange: (next: number) => void;
+  setPageIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function ComicViewer({ pageIndex, onChange }: Props) {
+const lastIndex = PAGES.length - 1;
+
+function clamp(n: number) {
+  if (n < 0) return 0;
+  if (n > lastIndex) return lastIndex;
+  return n;
+}
+
+export function ComicViewer({ pageIndex, setPageIndex }: Props) {
   const slug = PAGES[pageIndex];
   const atStart = pageIndex === 0;
-  const atEnd = pageIndex === PAGES.length - 1;
+  const atEnd = pageIndex === lastIndex;
+
+  const goPrev = () => setPageIndex((p) => clamp(p - 1));
+  const goNext = () => setPageIndex((p) => clamp(p + 1));
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -22,12 +33,12 @@ export function ComicViewer({ pageIndex, onChange }: Props) {
       if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
         return;
       }
-      if (e.key === "ArrowLeft" && pageIndex > 0) onChange(pageIndex - 1);
-      if (e.key === "ArrowRight" && pageIndex < PAGES.length - 1) onChange(pageIndex + 1);
+      if (e.key === "ArrowLeft") setPageIndex((p) => clamp(p - 1));
+      if (e.key === "ArrowRight") setPageIndex((p) => clamp(p + 1));
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [pageIndex, onChange]);
+  }, [setPageIndex]);
 
   return (
     <div className="relative hidden h-full shrink-0 aspect-[210/297] bg-black md:block">
@@ -46,7 +57,7 @@ export function ComicViewer({ pageIndex, onChange }: Props) {
         size="icon"
         aria-label="Página anterior"
         disabled={atStart}
-        onClick={() => onChange(pageIndex - 1)}
+        onClick={goPrev}
         className="absolute left-3 top-1/2 z-10 size-14 -translate-y-1/2 rounded-full opacity-70 hover:opacity-100"
       >
         <ChevronLeft className="size-7" />
@@ -57,7 +68,7 @@ export function ComicViewer({ pageIndex, onChange }: Props) {
         size="icon"
         aria-label="Página siguiente"
         disabled={atEnd}
-        onClick={() => onChange(pageIndex + 1)}
+        onClick={goNext}
         className="absolute right-3 top-1/2 z-10 size-14 -translate-y-1/2 rounded-full opacity-70 hover:opacity-100"
       >
         <ChevronRight className="size-7" />
